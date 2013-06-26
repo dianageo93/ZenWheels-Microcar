@@ -176,6 +176,17 @@ public class BluetoothSerialService {
 	    	public ConnectThread(BluetoothDevice device) {
 	    		// TODO Auto-generated constructor stub
 	    		this.mDevice = device;
+	    		BluetoothSocket tmp = null;
+	            // Get a BluetoothSocket for a connection with the
+	            // given BluetoothDevice
+	            try {
+	                
+	                    tmp = device.createRfcommSocketToServiceRecord(SPP_UUID);
+	                
+	            } catch (IOException e) {
+	                Log.e(TAG, "create() failed", e);
+	            }
+	            mSocket = tmp;
 	    	}
 
 	    	public void run() {
