@@ -60,8 +60,8 @@ public class MainActivity extends Activity {
 		
 		mBtSS = new BluetoothSerialService(context, handler);
 		
-		Button goForthBtn = (Button)findViewById(R.id.go_forth);
-		goForthBtn.setOnTouchListener(new View.OnTouchListener() {
+		Button horn = (Button)findViewById(R.id.horn);
+		horn.setOnTouchListener(new View.OnTouchListener() {
 			@Override			
 		    public boolean onTouch(View v, MotionEvent event) {
 				if(event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -81,6 +81,52 @@ public class MainActivity extends Activity {
 	            return true;
 		    }
 		});
+		
+		Button lightsSoft = (Button)findViewById(R.id.lights_soft);
+//		lightsSoft.setOnTouchListener(new View.OnTouchListener() {
+//			@Override			
+//		    public boolean onTouch(View v, MotionEvent event) {
+//				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//					// Check that we're actually connected before trying anything
+//					if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+//						Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
+//					}
+//					else {
+//						byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_SOFT).array();
+//						mBtSS.write(send);
+//					}
+//				}
+//				if(event.getAction() == MotionEvent.ACTION_UP){
+//					byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_OFF).array();
+//					mBtSS.write(send);
+//	            }
+//	            return true;
+//		    }
+//		});
+		
+		lightsSoft.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_SOFT).array();
+				mBtSS.write(send);
+            }
+        });
+		
+		Button lights = (Button)findViewById(R.id.lights);
+		lights.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS).array();
+				mBtSS.write(send);
+            }
+        });
+		
+		Button lightsOff = (Button)findViewById(R.id.lights_off);
+		lightsOff.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_OFF).array();
+				mBtSS.write(send);
+            }
+        });
+
 	}
 	
 	@Override

@@ -12,6 +12,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/bluetooth_connect" />
+    
+    <Button android:id="@+id/horn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/horn"
+            android:layout_toRightOf="@id/bluetooth_connect" />
+    
+    <Button android:id="@+id/lights_soft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lights_soft"
+            android:layout_below="@id/horn" />
+    
+    <Button android:id="@+id/lights"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lights"
+            android:layout_below="@id/lights_soft" />
+    
+    <Button android:id="@+id/lights_off"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/lights_off"
+            android:layout_below="@id/lights" />
+    
 
 
 </RelativeLayout>
