@@ -24,9 +24,7 @@ public class MainActivity extends Activity {
 
 	private BluetoothAdapter mBluetoothAdapter = null;
 	BluetoothSerialService mBtSS = null;
-	public final int HORN_OFF = 0x8600;
-	public final int HORN_ON = 0x8601;
-	public final String horn = "8601";
+	private final raceCarCodes codes = new raceCarCodes();
 	// Intent request codes
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
@@ -72,12 +70,12 @@ public class MainActivity extends Activity {
 						Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
 					}
 					else {
-						byte[] send = ByteBuffer.allocate(4).putInt(HORN_ON).array();
+						byte[] send = ByteBuffer.allocate(4).putInt(codes.HORN_ON).array();
 						mBtSS.write(send);
 					}
 				}
 				if(event.getAction() == MotionEvent.ACTION_UP){
-					byte[] send = ByteBuffer.allocate(4).putInt(HORN_OFF).array();
+					byte[] send = ByteBuffer.allocate(4).putInt(codes.HORN_OFF).array();
 					mBtSS.write(send);
 	            }
 	            return true;
