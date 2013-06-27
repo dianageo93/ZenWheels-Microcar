@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -23,7 +24,9 @@ public class MainActivity extends Activity {
 
 	private BluetoothAdapter mBluetoothAdapter = null;
 	BluetoothSerialService mBtSS = null;
-	public final int HORN_CHANNEL = 134;
+	public final int HORN_OFF = 0x8600;
+	public final int HORN_ON = 0x8601;
+	public final String horn = "8601";
 	// Intent request codes
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
@@ -57,20 +60,27 @@ public class MainActivity extends Activity {
 		    }
 		});
 		
+		mBtSS = new BluetoothSerialService(context, handler);
+		
 		Button goForthBtn = (Button)findViewById(R.id.go_forth);
-		goForthBtn.setOnClickListener(new Button.OnClickListener() {
-		    public void onClick(View v) {
-		        // Check that we're actually connected before trying anything
-		        if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
-		            Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
-		            return;
-		        }
-		        else {
-		        	Toast.makeText(context, "connected" + data.getExtras().getString(DeviceListActivity.EXTRA_DEVICE_ADDRESS), Toast.LENGTH_SHORT).show();
-		        	byte[] send = ByteBuffer.allocate(4).putInt(HORN_CHANNEL).array();
-		        	mBtSS.start();
-		        	mBtSS.write(send);
-		        }
+		goForthBtn.setOnTouchListener(new View.OnTouchListener() {
+			@Override			
+		    public boolean onTouch(View v, MotionEvent event) {
+				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+					// Check that we're actually connected before trying anything
+					if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+						Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
+					}
+					else {
+						byte[] send = ByteBuffer.allocate(4).putInt(HORN_ON).array();
+						mBtSS.write(send);
+					}
+				}
+				if(event.getAction() == MotionEvent.ACTION_UP){
+					byte[] send = ByteBuffer.allocate(4).putInt(HORN_OFF).array();
+					mBtSS.write(send);
+	            }
+	            return true;
 		    }
 		});
 	}
