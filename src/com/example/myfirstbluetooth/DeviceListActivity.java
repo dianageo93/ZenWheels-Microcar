@@ -79,14 +79,8 @@ public class DeviceListActivity extends Activity {
             // Create the result Intent and include the MAC address
             Intent intent = new Intent();
             intent.putExtra(EXTRA_DEVICE_ADDRESS, address);
-
             // Set result and finish this Activity
             setResult(Activity.RESULT_OK, intent);
-            // Get the BluetoothDevice object
-            BluetoothDevice device = mBluetoothAdapter.getRemoteDevice(address);
-            // Attempt to connect to the device
-            BluetoothSerialService mBtSS = new BluetoothSerialService(context, handler);
-            mBtSS.connect(device, true);
             finish();
         }
     };

@@ -5,6 +5,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
+import com.example.raceCar.MainActivity;
+
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -16,7 +18,7 @@ import android.util.Log;
 
 public class BluetoothSerialService {
 	// Debugging
-    private static final String TAG = "BluetoothChatService";
+    private static final String TAG = "BluetoothSERIALService";
     private static final boolean D = true;
     
     // Unique UUID for this application
@@ -71,11 +73,11 @@ public class BluetoothSerialService {
 	 public synchronized void start() {
 	        if (D) Log.d(TAG, "start");
 
-	        // Cancel any thread attempting to make a connection
-	        if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
-
-	        // Cancel any thread currently running a connection
-	        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
+//	        // Cancel any thread attempting to make a connection
+//	        if (mConnectThread != null) {mConnectThread.cancel(); mConnectThread = null;}
+//
+//	        // Cancel any thread currently running a connection
+//	        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
 
 	        setState(STATE_LISTEN);
 	    }
@@ -129,8 +131,8 @@ public class BluetoothSerialService {
 
 	        // Start the thread to connect with the given device
 	        mConnectThread = new ConnectThread(device);
-	        mConnectThread.start();
-	        setState(STATE_CONNECTING);
+	        mConnectThread.run();
+	        setState(STATE_CONNECTED);
 	        return;
 	    }
 	    
@@ -148,13 +150,9 @@ public class BluetoothSerialService {
 	        // Cancel any thread currently running a connection
 	        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
 
-	        // Start the thread to manage the connection and perform transmissions
-	        mConnectedThread = new ConnectedThread(socket);
-	        mConnectedThread.start();
-
 	        // Send the name of the connected device back to the UI Activity
 	        this.mConnectedThread = new ConnectedThread(socket);
-	        this.mConnectedThread.start();
+	        //this.mConnectedThread.start();
 	        Message localMessage = this.mHandler.obtainMessage(MESSAGE_DEVICE_CONNECTED);
 	        localMessage.obj = socket;
 	        this.mHandler.sendMessage(localMessage);
@@ -171,7 +169,6 @@ public class BluetoothSerialService {
 	    	
 	    	private BluetoothSocket mSocket;
 	        private final BluetoothDevice mDevice;
-	        private static final String TAG = "BluetoothChatService";
 
 	    	public ConnectThread(BluetoothDevice device) {
 	    		// TODO Auto-generated constructor stub
@@ -283,6 +280,7 @@ public class BluetoothSerialService {
 	        public void write(byte[] buffer) {
 	            try {
 	                mmOutStream.write(buffer);
+	               // mHandler.obtainMessage(MainActivity.MESSAGE_WRITE, -1, -1, buffer).sendToTarget();
 	                return;
 	            } catch (IOException e) {
 	                Log.e(TAG, "Exception during write", e);

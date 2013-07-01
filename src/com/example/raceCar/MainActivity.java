@@ -32,6 +32,11 @@ public class MainActivity extends Activity {
     private static Context context;
     private static Handler handler = new Handler();
     private Intent data;
+    private int steer = 0;
+    private int steer_right = 0;
+    private int speed = 0;
+    private int speed_front = 0;
+    private int lightsCount = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -82,51 +87,126 @@ public class MainActivity extends Activity {
 		    }
 		});
 		
-		Button lightsSoft = (Button)findViewById(R.id.lights_soft);
-//		lightsSoft.setOnTouchListener(new View.OnTouchListener() {
-//			@Override			
-//		    public boolean onTouch(View v, MotionEvent event) {
-//				if(event.getAction() == MotionEvent.ACTION_DOWN) {
-//					// Check that we're actually connected before trying anything
-//					if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
-//						Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
-//					}
-//					else {
-//						byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_SOFT).array();
-//						mBtSS.write(send);
-//					}
-//				}
-//				if(event.getAction() == MotionEvent.ACTION_UP){
-//					byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_OFF).array();
-//					mBtSS.write(send);
-//	            }
-//	            return true;
-//		    }
-//		});
-		
-		lightsSoft.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_SOFT).array();
-				mBtSS.write(send);
-            }
-        });
-		
 		Button lights = (Button)findViewById(R.id.lights);
 		lights.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS).array();
+            	byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_OFF).array();
+            	if(lightsCount == 0) {
+            		send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_SOFT).array();
+            		lightsCount++;
+            	}
+            	else if(lightsCount == 1) {
+            		send = ByteBuffer.allocate(4).putInt(codes.LIGHTS).array();
+            		lightsCount++;
+            	}
+            	else {
+            		send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_OFF).array();
+            		lightsCount = 0;
+            	}
 				mBtSS.write(send);
             }
         });
 		
-		Button lightsOff = (Button)findViewById(R.id.lights_off);
-		lightsOff.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	byte[] send = ByteBuffer.allocate(4).putInt(codes.LIGHTS_OFF).array();
-				mBtSS.write(send);
-            }
-        });
-
+//		Button steerLeftPlus = (Button)findViewById(R.id.steer_left_plus);
+//		steerLeftPlus.setOnTouchListener(new View.OnTouchListener() {
+//			@Override			
+//		    public boolean onTouch(View v, MotionEvent event) {
+//				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//					byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER_LEFT[steer]).array();
+//					mBtSS.write(send);
+//					if(steer < codes.STEER_LEFT.length - 9) {
+//						steer += 8;
+//					}
+//				}
+//				return true;
+//			}
+//		});
+//		
+//		Button steerLeftMinus = (Button)findViewById(R.id.steer_left_minus);
+//		steerLeftMinus.setOnTouchListener(new View.OnTouchListener() {
+//			@Override			
+//		    public boolean onTouch(View v, MotionEvent event) {
+//				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//					byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER_LEFT[steer]).array();
+//					mBtSS.write(send);
+//					if(steer > 8) {
+//						steer -= 8;
+//					}
+//				}
+//				return true;
+//			}
+//		});
+//		
+//		Button steerRightPlus = (Button)findViewById(R.id.steer_right_plus);
+//		steerRightPlus.setOnTouchListener(new View.OnTouchListener() {
+//			@Override			
+//		    public boolean onTouch(View v, MotionEvent event) {
+//				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//					byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER_RIGHT[steer_right]).array();
+//					mBtSS.write(send);
+//					if(steer_right < codes.STEER_RIGHT.length - 9) {
+//						steer_right += 8;
+//					}
+//				}
+//				return true;
+//			}
+//		});
+//		
+//		Button steerRightMinus = (Button)findViewById(R.id.steer_right_minus);
+//		steerRightMinus.setOnTouchListener(new View.OnTouchListener() {
+//			@Override			
+//		    public boolean onTouch(View v, MotionEvent event) {
+//				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//					byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER_RIGHT[steer_right]).array();
+//					mBtSS.write(send);
+//					if(steer_right > 8) {
+//						steer_right -= 8;
+//					}
+//				}
+//				return true;
+//			}
+//		});
+//		
+//		Button noSteer = (Button)findViewById(R.id.no_steer);
+//		noSteer.setOnClickListener(new View.OnClickListener() {
+//            public void onClick(View v) {
+//            	byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER_LEFT[0]).array();
+//            	mBtSS.write(send);
+//            	steer = 0;
+//            	steer_right = 0;
+//            }
+//        });
+//		
+//		Button speedPlus = (Button)findViewById(R.id.speed_plus);
+//		speedPlus.setOnTouchListener(new View.OnTouchListener() {
+//			@Override			
+//		    public boolean onTouch(View v, MotionEvent event) {
+//				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//					byte[] send = ByteBuffer.allocate(4).putInt(codes.SPEED_BACK[speed]).array();
+//					mBtSS.write(send);
+//					if(speed < codes.SPEED_BACK.length - 9) {
+//						speed += 8;
+//					}
+//				}
+//				return true;
+//			}
+//		});
+//		
+//		Button speedFront = (Button)findViewById(R.id.speed_front);
+//		speedFront.setOnTouchListener(new View.OnTouchListener() {
+//			@Override			
+//		    public boolean onTouch(View v, MotionEvent event) {
+//				if(event.getAction() == MotionEvent.ACTION_DOWN) {
+//					byte[] send = ByteBuffer.allocate(4).putInt(codes.SPEED_FRONT[speed_front]).array();
+//					mBtSS.write(send);
+//					if(speed_front < codes.SPEED_FRONT.length - 9) {
+//						speed_front += 8;
+//					}
+//				}
+//				return true;
+//			}
+//		});
+		
 	}
 	
 	@Override
