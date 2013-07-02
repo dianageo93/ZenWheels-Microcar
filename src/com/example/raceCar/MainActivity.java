@@ -34,7 +34,9 @@ public class MainActivity extends Activity {
     private int steer = 0;
     private int speed = 0;
     private int lightsCount = 0;
-    private int blinkLeftCount = 0;
+    private int blinkLeftFlag = 0;
+    private int blinkRightFlag = 0;
+    private int faultFlag = 0;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -189,12 +191,15 @@ public class MainActivity extends Activity {
             }
         });
 		
-		Runnable blinkLeftRunnable = new Runnable() {
+		Runnable blinkRunnable = new Runnable() {
 			@Override
 			public void run() {
-				byte[] send = ByteBuffer.allocate(4).putInt(codes.BLINK_LEFT[0]).array();
+				byte[] send = null;
 				while(true) {
-					if(blinkLeftCount == 1) {
+					if(blinkLeftFlag == 1) {
+						//back
+						send = ByteBuffer.allocate(4).putInt(codes.BLINK_LEFT[0]).array();
+						//front
 						mBtSS.write(send);
 						send = ByteBuffer.allocate(4).putInt(codes.BLINK_LEFT[1]).array();
 						mBtSS.write(send);
@@ -213,6 +218,51 @@ public class MainActivity extends Activity {
 							e.printStackTrace();
 						}
 					}
+					else if(blinkRightFlag == 1) {
+						//back
+						send = ByteBuffer.allocate(4).putInt(codes.BLINK_RIGHT[0]).array();
+						//front
+						mBtSS.write(send);
+						send = ByteBuffer.allocate(4).putInt(codes.BLINK_RIGHT[1]).array();
+						mBtSS.write(send);
+						try {
+								Thread.sleep(400);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						send = ByteBuffer.allocate(4).putInt(codes.BLINK_RIGHT_OFF).array();
+						mBtSS.write(send);
+						try {
+							Thread.sleep(400);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					else if(faultFlag == 1) {
+						for(int signal : codes.FAULT) {
+							send = ByteBuffer.allocate(4).putInt(signal).array();
+							mBtSS.write(send);
+						}
+						try {
+								Thread.sleep(400);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+						for(int signal : codes.FAULT_OFF) {
+							send = ByteBuffer.allocate(4).putInt(signal).array();
+							mBtSS.write(send);
+						}
+						try {
+							Thread.sleep(400);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 					else {
 						try {
 							Thread.sleep(200);
@@ -221,11 +271,12 @@ public class MainActivity extends Activity {
 							e.printStackTrace();
 						}
 					}
+					
 				}
 			}
 		};
 		
-		final Thread blinkRunnableThread = new Thread(blinkLeftRunnable);
+		final Thread blinkRunnableThread = new Thread(blinkRunnable);
 		blinkRunnableThread.start();
 		
 		Button blinkLeft = (Button)findViewById(R.id.blink_left);
@@ -235,11 +286,45 @@ public class MainActivity extends Activity {
 					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
 				}
             	else {
-            		if(blinkLeftCount == 0) {
-            			blinkLeftCount = 1;
+            		if(blinkLeftFlag == 0) {
+            			blinkLeftFlag = 1;
             		}
-            		else if(blinkLeftCount == 1) {
-            			blinkLeftCount = 0;
+            		else if(blinkLeftFlag == 1) {
+            			blinkLeftFlag = 0;
+            		}
+            	}
+            }
+        });
+		
+		Button blinkRight = (Button)findViewById(R.id.blink_right);
+		blinkRight.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
+				}
+            	else {
+            		if(blinkRightFlag == 0) {
+            			blinkRightFlag = 1;
+            		}
+            		else if(blinkRightFlag == 1) {
+            			blinkRightFlag = 0;
+            		}
+            	}
+            }
+        });
+		
+		Button fault = (Button)findViewById(R.id.fault);
+		fault.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
+				}
+            	else {
+            		if(faultFlag == 0) {
+            			faultFlag = 1;
+            		}
+            		else if(faultFlag == 1) {
+            			faultFlag = 0;
             		}
             	}
             }
