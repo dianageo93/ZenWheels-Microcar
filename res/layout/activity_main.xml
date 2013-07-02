@@ -2,130 +2,91 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/grey"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:background="@color/grey"
     tools:context=".MainActivity" >
 
-    <Button android:id="@+id/bluetooth_connect"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            style="@style/bluetoothConnectBtn"
-            android:background="@drawable/bluetooth1" />
-    
+    <Button
+        android:id="@+id/bluetooth_connect"
+        style="@style/bluetoothConnectBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/bluetooth1" />
+
     <TextView
         android:id="@+id/bluetooth_connect_textView"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:gravity="center"
         android:layout_toRightOf="@id/bluetooth_connect"
+        android:gravity="center"
+        android:text="@string/bluetooth_connect"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
         android:textSize="15sp"
-        android:text="@string/bluetooth_connect" />
-    
-   <Button android:id="@+id/horn"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/horn"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/bluetooth_connect" />
-    
-    <Button android:id="@+id/lights"
-        	android:background="@drawable/lights"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_toRightOf="@id/horn"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/bluetooth_connect"/>
-    
-    <Button android:id="@+id/blink_left"
-        	android:background="@drawable/arrow_left"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_toRightOf="@id/lights"
-            android:layout_marginLeft="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/bluetooth_connect"/>
-    
-    <Button android:id="@+id/fault"
-        	android:background="@drawable/fault"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_toRightOf="@id/blink_left"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/bluetooth_connect"/>
-    
-    <Button android:id="@+id/blink_right"
-        	android:background="@drawable/arrow_right"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_toRightOf="@id/fault"
-            android:layout_marginTop="10dp"
-            android:layout_below="@id/bluetooth_connect"/>
-    
-<!--  <Button android:id="@+id/no_steer"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/no_steer"
-            android:layout_below="@id/lights_off" />
-    
-    <TextView android:id="@+id/steer_left"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/steer_left"
-            android:layout_below="@id/no_steer" />
-    
-    <Button android:id="@+id/steer_left_plus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/steer_left_plus"
-            android:layout_toRightOf="@id/no_steer"
-            android:layout_below="@id/no_steer" />
-    
-    <Button android:id="@+id/steer_left_minus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/steer_left_minus"
-            android:layout_toRightOf="@id/steer_left_plus"
-            android:layout_below="@id/no_steer" />
-    
-    <TextView android:id="@+id/steer_right"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/steer_right"
-            android:layout_below="@id/steer_left" />
-    
-    <Button android:id="@+id/steer_right_plus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/steer_left_plus"
-            android:layout_toRightOf="@id/no_steer"
-            android:layout_below="@id/steer_left_plus" />
-    
-    <Button android:id="@+id/steer_right_minus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/steer_left_minus"
-            android:layout_toRightOf="@id/steer_right_plus"
-            android:layout_below="@id/steer_left_minus" />
-    
-    <Button android:id="@+id/speed_plus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/steer_left_plus"
-            android:layout_below="@id/steer_right_plus" />
-    
-    <Button android:id="@+id/speed_front"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/steer_left_plus"
-            android:layout_below="@id/speed_plus" /> -->
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/horn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/bluetooth_connect"
+        android:background="@drawable/horn" />
+
+    <Button
+        android:id="@+id/lights"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/bluetooth_connect"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/horn"
+        android:background="@drawable/lights" />
+
+    <Button
+        android:id="@+id/blink_left"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/bluetooth_connect"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@id/lights"
+        android:background="@drawable/arrow_left" />
+
+    <Button
+        android:id="@+id/fault"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/bluetooth_connect"
+        android:layout_toRightOf="@id/blink_left"
+        android:background="@drawable/fault" />
+
+    <Button
+        android:id="@+id/blink_right"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/bluetooth_connect"
+        android:layout_toRightOf="@id/fault"
+        android:background="@drawable/arrow_right" />
+
+    <Button
+        android:id="@+id/steer_front"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/blink_left"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/steer_front" />
+
+    <Button
+        android:id="@+id/steer_left"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@id/steer_front"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/steer_left" />
 
     <View
+        android:id="@+id/view1"
         android:layout_width="fill_parent"
         android:layout_height="1dip"
         android:layout_alignLeft="@+id/bluetooth_connect"
@@ -133,17 +94,60 @@
         android:background="#000000" />
 
     <View
-        android:layout_width="fill_parent"
-        android:layout_height="1dip"
-        android:layout_alignLeft="@+id/bluetooth_connect"
-        android:layout_alignTop="@+id/horn"
-        android:background="#000000" />
-
-    <View
+        android:id="@+id/view2"
         android:layout_width="fill_parent"
         android:layout_height="1dip"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="#000000" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_alignBottom="@+id/bluetooth_connect"
+        android:layout_alignLeft="@+id/bluetooth_connect"
+        android:background="#000000" />
+
+    <Button
+        android:id="@+id/steer_right"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignBaseline="@+id/steer_left"
+        android:layout_alignBottom="@+id/steer_left"
+        android:layout_alignRight="@+id/view1"
+        android:background="@drawable/steer_right" />
+
+    <Button
+        android:id="@+id/steer_back"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/steer_right"
+        android:layout_toLeftOf="@+id/fault"
+        android:background="@drawable/steer_back" />
+
+    <Button
+        android:id="@+id/no_steer"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_alignLeft="@+id/steer_left"
+        android:layout_alignParentBottom="true"
+        android:text="@string/no_steer" />
+
+    <Button
+        android:id="@+id/no_speed"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_alignBottom="@+id/no_steer"
+        android:layout_alignParentRight="true"
+        android:text="@string/no_speed" />
+
+    <Button
+        android:id="@+id/onoff"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignRight="@+id/blink_right"
+        android:layout_below="@+id/view2"
+        android:background="@drawable/onoffbtn" />
 
 </RelativeLayout>

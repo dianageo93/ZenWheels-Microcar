@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -63,7 +64,10 @@ public class MainActivity extends Activity {
 		    }
 		});
 		
+		
+		Log.d("CONECTARE", "before " + (mBtSS==null));
 		mBtSS = new BluetoothSerialService(context, handler);
+		Log.d("CONECTARE", "after " + mBtSS.getState());
 		
 		Button horn = (Button)findViewById(R.id.horn);
 		horn.setOnTouchListener(new View.OnTouchListener() {
@@ -71,7 +75,7 @@ public class MainActivity extends Activity {
 		    public boolean onTouch(View v, MotionEvent event) {
 				if(event.getAction() == MotionEvent.ACTION_DOWN) {
 					// Check that we're actually connected before trying anything
-					if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+					if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
 						Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
 					}
 					else {
@@ -90,7 +94,7 @@ public class MainActivity extends Activity {
 		Button lights = (Button)findViewById(R.id.lights);
 		lights.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
 					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
 				}
             	else {
@@ -112,51 +116,24 @@ public class MainActivity extends Activity {
             }
         });
 		
-		speed = codes.SPEED.length/2;
-		Button steerFrButton = (Button)findViewById(R.id.steer_front);
-		steerFrButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
-					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
-				}
-            	else {
-            		byte[] send = ByteBuffer.allocate(4).putInt(codes.SPEED[speed]).array();
-					mBtSS.write(send);
-					if(speed < codes.SPEED.length - 9) {
-						speed += 8;
-					}
-            	}
-            }
-        });
-		
-		Button steerBackButton = (Button)findViewById(R.id.steer_back);
-		steerBackButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
-					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
-				}
-            	else {
-            		byte[] send = ByteBuffer.allocate(4).putInt(codes.SPEED[speed]).array();
-					mBtSS.write(send);
-					if(speed > 8) {
-						speed -= 8;
-					}
-            	}
-            }
-        });
-		
-		steer = codes.SPEED.length/2;
 		Button steerLeftButton = (Button)findViewById(R.id.steer_left);
 		steerLeftButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
 					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
 				}
             	else {
-            		byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER[steer]).array();
-					mBtSS.write(send);
-					if(steer < codes.STEER.length - 9) {
-						steer += 8;
+					if(steer >= 8) {
+						steer -= 8;
+						byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER_RIGHT[steer]).array();
+						mBtSS.write(send);
+					}
+					else {
+						if(Math.abs(steer) < codes.STEER_LEFT.length - 9) {
+							steer -= 8;
+						}
+						byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER_LEFT[Math.abs(steer)]).array();
+						mBtSS.write(send);
 					}
             	}
             }
@@ -165,15 +142,70 @@ public class MainActivity extends Activity {
 		Button steerRightButton = (Button)findViewById(R.id.steer_right);
 		steerRightButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
 					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
 				}
             	else {
-            		byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER[steer]).array();
-					mBtSS.write(send);
-					if(steer > 8) {
-						steer -= 8;
+            		if(steer >= 0) {
+            			if(steer < codes.STEER_RIGHT.length - 9) {
+    						steer += 8;
+    					}
+            			byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER_RIGHT[steer]).array();
+    					mBtSS.write(send);
+            		}
+            		else {
+            			steer += 8;
+            			byte[] send = ByteBuffer.allocate(4).putInt(codes.STEER_LEFT[Math.abs(steer)]).array();
+    					mBtSS.write(send);
+            		}
+            		
+            	}
+            }
+        });
+		
+		Button steerBackButton = (Button)findViewById(R.id.steer_back);
+		steerBackButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
+					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
+				}
+            	else {
+					if(speed >= 8) {
+						speed -= 8;
+						byte[] send = ByteBuffer.allocate(4).putInt(codes.SPEED_FRONT[speed]).array();
+						mBtSS.write(send);
 					}
+					else {
+						if(Math.abs(speed) < codes.SPEED_BACK.length - 9) {
+							speed -= 8;
+						}
+						byte[] send = ByteBuffer.allocate(4).putInt(codes.SPEED_BACK[Math.abs(speed)]).array();
+						mBtSS.write(send);
+					}
+            	}
+            }
+        });
+		
+		Button steerFrontButton = (Button)findViewById(R.id.steer_front);
+		steerFrontButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
+					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
+				}
+            	else {
+            		if(speed >= 0) {
+            			if(speed < codes.SPEED_FRONT.length - 9) {
+    						speed += 8;
+    					}
+            			byte[] send = ByteBuffer.allocate(4).putInt(codes.SPEED_FRONT[speed]).array();
+    					mBtSS.write(send);
+            		}
+            		else {
+            			speed += 8;
+            			byte[] send = ByteBuffer.allocate(4).putInt(codes.SPEED_BACK[Math.abs(speed)]).array();
+    					mBtSS.write(send);
+            		}
+            		
             	}
             }
         });
@@ -181,12 +213,12 @@ public class MainActivity extends Activity {
 		Button onoffBtn = (Button)findViewById(R.id.onoff);
 		onoffBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
 					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
 				}
             	else {
-            		byte[] send = ByteBuffer.allocate(4).putInt(codes.OFF).array();
-					mBtSS.write(send);
+            		mBtSS.stop();
+            		mBtSS = new BluetoothSerialService(context, handler);
             	}
             }
         });
@@ -282,7 +314,7 @@ public class MainActivity extends Activity {
 		Button blinkLeft = (Button)findViewById(R.id.blink_left);
 		blinkLeft.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
 					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
 				}
             	else {
@@ -299,7 +331,7 @@ public class MainActivity extends Activity {
 		Button blinkRight = (Button)findViewById(R.id.blink_right);
 		blinkRight.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
 					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
 				}
             	else {
@@ -316,7 +348,7 @@ public class MainActivity extends Activity {
 		Button fault = (Button)findViewById(R.id.fault);
 		fault.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
 					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
 				}
             	else {
@@ -326,6 +358,34 @@ public class MainActivity extends Activity {
             		else if(faultFlag == 1) {
             			faultFlag = 0;
             		}
+            	}
+            }
+        });
+		
+		Button noSpeed = (Button)findViewById(R.id.no_speed);
+		noSpeed.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
+					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
+				}
+            	else {
+            		byte[] send = ByteBuffer.allocate(4).putInt(codes.NO_SPEED).array();
+					mBtSS.write(send);
+					speed = 0;
+            	}
+            }
+        });
+		
+		Button noSteer = (Button)findViewById(R.id.no_steer);
+		noSteer.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+            	if (mBtSS.getState() != BluetoothSerialService.STATE_CONNECTED || mBtSS == null) {
+					Toast.makeText(context, R.string.not_connected, Toast.LENGTH_SHORT).show();
+				}
+            	else {
+            		byte[] send = ByteBuffer.allocate(4).putInt(codes.NO_STEER).array();
+					mBtSS.write(send);
+					steer = 0;
             	}
             }
         });
@@ -345,13 +405,24 @@ public class MainActivity extends Activity {
         }
     }
 	
+//	@Override
+//	protected void onPause() {
+//		// TODO Auto-generated method stub
+//		if(mBtSS != null) {
+//			mBtSS.stop();
+//		}
+//	}
+	
 	protected void onActivityResult(int requestCode, int resultCode, Intent data){
 	    // See which child activity is calling us back.
 	    switch (requestCode) {
 	        case REQUEST_CONNECT_DEVICE_SECURE:
 	            if (resultCode == Activity.RESULT_OK){
 	                connectDevice(data, true);
+	                Log.d("CONECTARE","m-am conectat");
+	                Toast.makeText(context, "m-am conectat", Toast.LENGTH_SHORT).show();
 	            } 
+	            break;
 	        case REQUEST_ENABLE_BT:
 	            break;
 	    }

@@ -177,9 +177,8 @@ public class BluetoothSerialService {
 	            // Get a BluetoothSocket for a connection with the
 	            // given BluetoothDevice
 	            try {
-	                
 	                    tmp = device.createRfcommSocketToServiceRecord(SPP_UUID);
-	                
+	                    
 	            } catch (IOException e) {
 	                Log.e(TAG, "create() failed", e);
 	            }
