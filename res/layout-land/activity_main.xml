@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/grey"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/onoff"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignBaseline="@+id/bluetooth_connect"
+        android:layout_alignBottom="@+id/bluetooth_connect"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="40dp"
+        android:background="@drawable/onoffbtn" />
+
+    <TextView
+        android:id="@+id/bluetooth_connect_textView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignTop="@+id/onoff"
+        android:layout_toRightOf="@+id/bluetooth_connect"
+        android:gravity="center"
+        android:text="@string/bluetooth_connect"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="22dp"
+        android:background="#000000" />
+
+    <Button
+        android:id="@+id/bluetooth_connect"
+        style="@style/bluetoothConnectBtn"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/view2"
+        android:layout_marginLeft="35dp"
+        android:background="@drawable/bluetooth1" />
+
+    <View
+        android:id="@+id/view3"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_alignBottom="@+id/bluetooth_connect_textView"
+        android:layout_alignParentLeft="true"
+        android:background="#000000" />
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/blink_right"
+        android:background="#000000" />
+
+    <Button
+        android:id="@+id/blink_right"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignRight="@+id/onoff"
+        android:layout_below="@+id/onoff"
+        android:background="@drawable/arrow_right" />
+
+    <Button
+        android:id="@+id/fault"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/view1"
+        android:layout_toLeftOf="@+id/blink_right"
+        android:background="@drawable/fault" />
+
+    <Button
+        android:id="@+id/blink_left"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBaseline="@+id/fault"
+        android:layout_alignBottom="@+id/fault"
+        android:layout_toLeftOf="@+id/fault"
+        android:background="@drawable/arrow_left" />
+
+    <Button
+        android:id="@+id/horn"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/view1"
+        android:layout_alignLeft="@+id/bluetooth_connect"
+        android:background="@drawable/horn" />
+
+    <Button
+        android:id="@+id/lights"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/onoff"
+        android:layout_marginLeft="15dp"
+        android:layout_toRightOf="@+id/horn"
+        android:background="@drawable/lights" />
+
+    <TextView
+        android:id="@+id/TextView01"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_below="@+id/view1"
+        android:layout_toLeftOf="@+id/blink_left"
+        android:layout_toRightOf="@+id/lights"
+        android:gravity="center"
+        android:text="@string/tilt_to_move"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

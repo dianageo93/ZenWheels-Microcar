@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">myFirstBluetooth</string>
+    <string name="app_name">myZenWheels</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="bluetooth_connect">Bluetooth connect</string>
@@ -20,5 +20,6 @@
     <string name="steer_left_plus">+</string>
     <string name="steer_left_minus">-</string>
     <string name="steer_right">SteerRight</string>
+    <string name="tilt_to_move">Tilt to move and steer</string>
 
 </resources>

@@ -93,16 +93,6 @@ public class BluetoothSerialService {
 	        if (mConnectedThread != null) {mConnectedThread.cancel(); mConnectedThread = null;}
 
 	        setState(STATE_LISTEN);
-
-//	        // Start the thread to listen on a BluetoothServerSocket
-//	        if (mSecureAcceptThread == null) {
-//	            mSecureAcceptThread = new AcceptThread(true);
-//	            mSecureAcceptThread.start();
-//	        }
-//	        if (mInsecureAcceptThread == null) {
-//	            mInsecureAcceptThread = new AcceptThread(false);
-//	            mInsecureAcceptThread.start();
-//	        }
 	    }
 	 
 	 /**
@@ -126,14 +116,16 @@ public class BluetoothSerialService {
 	     */
 	    public void write(byte[] out) {
 	        // Create temporary object
-	        ConnectedThread r;
+	        ConnectedThread r = null;
 	        // Synchronize a copy of the ConnectedThread
 	        synchronized (this) {
 	            if (mState != STATE_CONNECTED) return;
 	            r = mConnectedThread;
 	        }
 	        // Perform the write unsynchronized
-	        r.write(out);
+	        if(r != null) {
+	        	r.write(out);
+	        }
 	    }
 	 
 	 /**
